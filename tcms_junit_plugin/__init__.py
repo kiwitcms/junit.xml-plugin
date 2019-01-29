@@ -2,6 +2,7 @@
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 
+from junitparser import Error, Failure, JUnitXml, Skipped
 from tcms_api.plugin_helpers import Backend
 
 
@@ -9,12 +10,45 @@ class Plugin:  # pylint: disable=too-few-public-methods
     def __init__(self):
         self.backend = Backend()
 
-    def parse(self, junit_file, progress_cb=None):
+    def parse(self, junit_xml, progress_cb=None):
         self.backend.configure()
 
-        # parsing goes here
-        #    if progress_cb:
-        #        progress_cb()
+        xml = JUnitXml.fromfile(junit_xml)
+        for xml_case in xml:
+            summary = "%s -> %s" % (xml_case.classname, xml_case.name)
+
+            test_case = self.backend.test_case_get_or_create(summary)
+            test_case_id = test_case['case_id']
+
+            self.backend.add_test_case_to_plan(test_case_id,
+                                               self.backend.plan_id)
+
+            test_case_run_id = self.backend.add_test_case_to_run(
+                test_case_id,
+                self.backend.run_id)
+            comment = 'Result recorded via Kiwi TCMS junit.xml-plugin'
+
+            if xml_case.result is None:
+                status_id = self.backend.get_status_id('PASSED')
+
+            if isinstance(xml_case.result, Failure):
+                status_id = self.backend.get_status_id('FAILED')
+                comment = xml_case.result.tostring()
+
+            if isinstance(xml_case.result, Error):
+                status_id = self.backend.get_status_id('ERROR')
+                comment = xml_case.result.tostring()
+
+            if isinstance(xml_case.result, Skipped):
+                status_id = self.backend.get_status_id('WAIVED')
+                comment = xml_case.result.message
+
+            self.backend.update_test_case_run(test_case_run_id,
+                                              status_id,
+                                              comment)
+
+            if progress_cb:
+                progress_cb()
 
 
 def main(argv):

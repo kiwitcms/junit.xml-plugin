@@ -1,2 +1,2 @@
-junit-xml==1.8
+junitparser==1.2.2
 tcms-api==5.1
