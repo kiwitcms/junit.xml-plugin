@@ -15,7 +15,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
 
         xml = JUnitXml.fromfile(junit_xml)
         for xml_case in xml:
-            summary = "%s -> %s" % (xml_case.classname, xml_case.name)
+            summary = "%s.%s" % (xml_case.classname, xml_case.name)
 
             test_case = self.backend.test_case_get_or_create(summary)
             test_case_id = test_case['case_id']
