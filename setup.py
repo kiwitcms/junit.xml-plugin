@@ -10,17 +10,17 @@ with open('README.rst') as readme:
 REQUIREMENTS = open('requirements.txt').readlines()
 
 
-setup(name='kiwitcms-tap-plugin',
-      version='0.1.1',
-      packages=['tcms_tap_plugin'],
-      scripts=['tcms-tap-plugin'],
-      description='Test Anything Protocol (TAP) plugin for '
+setup(name='kiwitcms-junit.xml-plugin',
+      version='0.0',
+      packages=['tcms_junit_plugin'],
+      scripts=['tcms-junit.xml-plugin'],
+      description='junit.xml plugin for '
                   'Kiwi TCMS test case management system',
       long_description=LONG_DESCRIPTION,
       author='Kiwi TCMS',
       author_email='info@kiwitcms.org',
       license='GPLv3+',
-      url='https://github.com/kiwitcms/tap-plugin',
+      url='https://github.com/kiwitcms/junit.xml-plugin',
       install_requires=REQUIREMENTS,
       classifiers=[
           'Development Status :: 4 - Beta',

@@ -1,2 +1,2 @@
-tap.py==2.5
+junit-xml==1.8
 tcms-api==5.1

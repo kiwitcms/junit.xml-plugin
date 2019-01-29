@@ -1,23 +1,23 @@
 .PHONY: flake8
 flake8:
-	@flake8 *.py tcms_tap_plugin tests
+	@flake8 *.py tcms_junit_plugin tests
 
 
 .PHONY: pylint
 pylint:
-	pylint -d missing-docstring *.py tcms_tap_plugin/
+	pylint -d missing-docstring *.py tcms_junit_plugin/
 	pylint -d missing-docstring -d invalid-name -d too-few-public-methods \
 	    -d protected-access -d duplicate-code tests/
 
 
 .PHONY: test
 test:
-	nosetests -v --with-coverage --cover-erase --cover-package=tcms_tap_plugin
+	nosetests -v --with-coverage --cover-erase --cover-package=tcms_junit_plugin
 
 
-.PHONY: tap
-tap:
-	./tests/bin/make-tap
+.PHONY: junit.xml
+junit.xml:
+	./tests/bin/make-junit.xml
 
 
 .PHONY: check-build

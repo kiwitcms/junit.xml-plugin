@@ -3,6 +3,5 @@
 dist/
 *.egg-info/
 .coverage
-*.tap
 .venv/
 build/

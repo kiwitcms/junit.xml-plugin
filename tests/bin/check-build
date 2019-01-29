@@ -40,7 +40,7 @@ echo "..... Trying to verify that all source files are present"
 # remove *.egg-info/ generated during build
 find . -type d -name '*.egg-info' | xargs rm -rf
 
-source_files=`find ./tcms_tap_plugin/ -type f | sed 's|./||'`
+source_files=`find ./tcms_junit_plugin/ -type f | sed 's|./||'`
 
 # verify for .tar.gz package
 package_files=`tar -tvf dist/*.tar.gz`
@@ -69,8 +69,8 @@ echo "..... Trying to install the new tarball inside a virtualenv"
 virtualenv -q -p $(which python) .venv/test-tarball
 source .venv/test-tarball/bin/activate
 pip install --upgrade setuptools pip Babel
-pip install --no-binary :all: -f dist/ kiwitcms-tap-plugin
-pip freeze | grep kiwitcms-tap-plugin
+pip install --no-binary :all: -f dist/ kiwitcms-junit.xml-plugin
+pip freeze | grep kiwitcms-junit.xml-plugin
 deactivate
 rm -rf .venv/
 
@@ -78,8 +78,8 @@ echo "..... Trying to install the new wheel inside a virtualenv"
 virtualenv -q -p $(which python) .venv/test-wheel
 source .venv/test-wheel/bin/activate
 pip install --upgrade setuptools pip Babel kerberos
-pip install --only-binary :all: -f dist/ kiwitcms-tap-plugin
-pip freeze | grep kiwitcms-tap-plugin
+pip install --only-binary :all: -f dist/ kiwitcms-junit.xml-plugin
+pip freeze | grep kiwitcms-junit.xml-plugin
 deactivate
 rm -rf .venv/
 

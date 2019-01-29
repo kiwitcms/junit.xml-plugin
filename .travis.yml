@@ -6,7 +6,7 @@ python:
 env:
   - MAKE=ci
   - MAKE=check-build
-  - MAKE=tap
+  - MAKE=junit.xml
 install:
   - pip install -r devel.txt
   - |
