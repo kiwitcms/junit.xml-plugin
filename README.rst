@@ -86,3 +86,13 @@ Usage
 
     # define environment variables
     tcms-junit.xml-plugin /path/to/junit.xml
+
+
+Changelog
+---------
+
+v0.3 (10 April 2019)
+~~~~~~~~~~~~~~~~~~~~
+
+- Works with Kiwi TCMS v6.7 or newer
+- Uses new names of API methods
