@@ -91,6 +91,14 @@ Usage
 Changelog
 ---------
 
+v0.4 (20 September 2019)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Update junitparser from 1.3.2 to 1.3.4
+- Support XML files with <testsuites> root tag (Katalon Studio).
+  Fixes `Issue #9 <https://github.com/kiwitcms/junit.xml-plugin/issues/9>`_
+
+
 v0.3 (10 April 2019)
 ~~~~~~~~~~~~~~~~~~~~
 
