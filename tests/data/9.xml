@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="Login test suite with data-driven-approach" time="102" tests="0" failures="1" errors="0">
+   <testsuite name="Login test suite with data-driven-approach" tests="0" failures="1" errors="0" time="102" timestamp="2019-05-15 10:46:05" hostname="hostname" id="Test Suites/Simple Examples/Login test suite with data-driven-approach">
+       <properties>
+           <property name="deviceName" value=""/>
+           <property name="devicePlatform" value=""/>
+           <property name="os" value="Windows 10 64bit"/>
+           <property name="katalonVersion" value="6.1.5.3"/>
+           <property name="browser" value="Chrome 74.0.3729.131"/>
+           <property name="hostAddress" value="10.0.75.1"/>
+           <property name="sessionId" value="be95c805dbf972b86c5e147e4cf50990"/>
+           <property name="seleniumVersion" value="3.7.1"/>
+           <property name="proxyInformation" value="ProxyInformation{proxyOption=NO_PROXY, proxyServerType=HTTP, password=, proxyServerAddress=, proxyServerPort=0}"/>
+           <property name="platform" value="Windows 10"/>
+       </properties>
+       <testcase name="will always report FAILED" classname="Parser test for Issue #9" status="FAILED">
+           <failure type="FAILED" message="Test Cases/Simple Examples/Login Test/Data-driven examples/Login with username and password as a default value of variables FAILED.&#xA;Reason:&#xA;com.kms.katalon.core.exception.StepFailedException: Unable to verify text 'System dashboard' is present &#xD;&#xA;&#x9;at "/>
+           <system-out>2019-05-15 10:46:06 - [TEST_CASE][FAILED] - Test Cases/Simple Examples/Login Test/Data-driven examples/Login with username and password as a default value of variables: Test Cases/Simple Examples/Login Test/Data-driven examples/Login with username and password as a default value of variables FAILED.</system-out>
+           <system-err>2019-05-15 10:46:06 - [TEST_CASE][FAILED] - Test Cases/Simple Examples/Login Test/Data-driven examples/Login with username and password as a default value of variables: Test Cases/Simple Examples/Login Test/Data-driven examples/Login with username and password as a default value of variables FAILED.</system-err>
+       </testcase>
+       <system-out>2019-05-15 10:46:05 - [TEST_SUITE][INCOMPLETE] - Login test suite with data-driven-approach: null</system-out>
+       <system-err>2019-05-15 10:46:05 - [TEST_SUITE][INCOMPLETE] - Login test suite with data-driven-approach: null</system-err>
+   </testsuite>
+</testsuites>
