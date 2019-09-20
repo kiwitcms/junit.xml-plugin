@@ -14,7 +14,18 @@ class Plugin:  # pylint: disable=too-few-public-methods
         self.backend.configure()
 
         xml = JUnitXml.fromfile(junit_xml)
-        for xml_case in xml:
+        # apparently junit.xml may contain either a <testsuites> tag,
+        # e.g. Katalon Studio
+        if xml._tag == "testsuites":  # pylint: disable=protected-access
+            cases = []
+            for suite in xml:
+                for case in suite:
+                    cases.append(case)
+        # or directly <testsuite> (only 1) tag - nose & py.test
+        else:
+            cases = list(xml)
+
+        for xml_case in cases:
             summary = "%s.%s" % (xml_case.classname, xml_case.name)
 
             test_case = self.backend.test_case_get_or_create(summary)

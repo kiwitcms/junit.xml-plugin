@@ -18,3 +18,6 @@ export TCMS_BUILD="$TRAVIS_BUILD_NUMBER-$(echo $TRAVIS_COMMIT | cut -c1-7)"
 
 nosetests --with-xunit
 ./tcms-junit.xml-plugin nosetests.xml
+
+# parse additional data files collected from issues
+./tcms-junit.xml-plugin tests/data/9.xml
