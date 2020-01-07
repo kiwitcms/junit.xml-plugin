@@ -100,6 +100,12 @@ Usage
 Changelog
 ---------
 
+v0.5 (07 January 2020)
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Update junitparser from 1.3.4 to 1.41
+
+
 v0.4 (20 September 2019)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
