@@ -100,6 +100,16 @@ Usage
 Changelog
 ---------
 
+
+v8.0.1 (10 February 2020)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This version works only with Kiwi TCMS v8.0 or later!
+
+- Adjust plugin due to API changes in Kiwi TCMS v8.0
+- Require tcms-api==8.0.1
+
+
 v0.5 (07 January 2020)
 ~~~~~~~~~~~~~~~~~~~~~~
 
