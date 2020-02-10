@@ -29,7 +29,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
             summary = "%s.%s" % (xml_case.classname, xml_case.name)
 
             test_case = self.backend.test_case_get_or_create(summary)
-            test_case_id = test_case['case_id']
+            test_case_id = test_case['id']
 
             self.backend.add_test_case_to_plan(test_case_id,
                                                self.backend.plan_id)
