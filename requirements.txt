@@ -1,2 +1,2 @@
 junitparser==1.4.1
-tcms-api==8.3.0
+tcms-api==8.4.0
