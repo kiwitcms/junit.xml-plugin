@@ -11,7 +11,7 @@ REQUIREMENTS = open('requirements.txt').readlines()
 
 
 setup(name='kiwitcms-junit.xml-plugin',
-      version='8.3',
+      version='8.4',
       packages=['tcms_junit_plugin'],
       scripts=['tcms-junit.xml-plugin'],
       description='junit.xml plugin for '
