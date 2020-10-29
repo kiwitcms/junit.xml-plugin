@@ -1,2 +1,2 @@
-junitparser==1.6.0
+junitparser==1.6.1
 tcms-api==8.6.0
