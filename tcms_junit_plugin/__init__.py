@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2021 Alexander Todorov <atodorov@MrSenko.com>
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 
@@ -39,20 +39,27 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 self.backend.run_id)
             comment = 'Result recorded via Kiwi TCMS junit.xml-plugin'
 
-            if xml_case.result is None:
+            if not xml_case.result:
                 status_id = self.backend.get_status_id('PASSED')
 
-            if isinstance(xml_case.result, Failure):
-                status_id = self.backend.get_status_id('FAILED')
-                comment = xml_case.result.tostring()
+            # note: since junitpartser v2.0 the result attribute holds
+            # a list of values b/c pytest can produce files which contain
+            # multiple results for the same test case. We take the first!
+            for result in xml_case.result:
+                if isinstance(result, Failure):
+                    status_id = self.backend.get_status_id('FAILED')
+                    comment = result.tostring()
+                    break
 
-            if isinstance(xml_case.result, Error):
-                status_id = self.backend.get_status_id('ERROR')
-                comment = xml_case.result.tostring()
+                if isinstance(result, Error):
+                    status_id = self.backend.get_status_id('ERROR')
+                    comment = result.tostring()
+                    break
 
-            if isinstance(xml_case.result, Skipped):
-                status_id = self.backend.get_status_id('WAIVED')
-                comment = xml_case.result.message
+                if isinstance(result, Skipped):
+                    status_id = self.backend.get_status_id('WAIVED')
+                    comment = result.message
+                    break
 
             self.backend.update_test_execution(test_execution_id,
                                                status_id,
