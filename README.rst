@@ -100,6 +100,15 @@ Usage
 Changelog
 ---------
 
+v9.0 (13 Jan 2021)
+~~~~~~~~~~~~~~~~~~
+
+- Compatible with Kiwi TCMS v9.0
+- Update tcms-api to 9.0
+- Update junitparser to 2.0.0
+- Adjusted code to handle jUnit v2.0 files
+
+
 v8.4 (28 Oct 2020)
 ~~~~~~~~~~~~~~~~~~
 
