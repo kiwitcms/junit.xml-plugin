@@ -26,7 +26,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
             cases = list(xml)
 
         for xml_case in cases:
-            summary = "%s.%s" % (xml_case.classname, xml_case.name)
+            summary = f"{xml_case.classname}.{xml_case.name}"
 
             test_case, _ = self.backend.test_case_get_or_create(summary)
             self.backend.add_test_case_to_plan(test_case['id'],
@@ -71,7 +71,8 @@ class Plugin:  # pylint: disable=too-few-public-methods
 
 def main(argv):
     if len(argv) < 2:
-        raise Exception("USAGE: %s junit.xml" % argv[0])
+        program_name = argv[0]
+        raise Exception(f"USAGE: {program_name} junit.xml")
 
     plugin = Plugin()
     plugin.parse(argv[1])
