@@ -12,7 +12,7 @@ with open('requirements.txt', encoding="utf-8") as requirements:
 
 
 setup(name='kiwitcms-junit.xml-plugin',
-      version='10.0',
+      version='11.0',
       packages=['tcms_junit_plugin'],
       scripts=['tcms-junit.xml-plugin'],
       description='junit.xml plugin for '

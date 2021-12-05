@@ -100,6 +100,15 @@ Usage
 Changelog
 ---------
 
+v11.0 (05 Dec 2021)
+~~~~~~~~~~~~~~~~~~~
+
+- Future compatible with upcomingKiwi TCMS v11.0
+- Update tcms-api to 11.0
+- Update junitparser from 2.0.0 to 2.2.0
+- Fix pylint issues
+
+
 v10.0 (02 Mar 2021)
 ~~~~~~~~~~~~~~~~~~~
 
