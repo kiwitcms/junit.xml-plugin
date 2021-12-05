@@ -8,7 +8,7 @@ from tcms_api.plugin_helpers import Backend
 
 class Plugin:  # pylint: disable=too-few-public-methods
     def __init__(self):
-        self.backend = Backend(prefix='[junit.xml] ')
+        self.backend = Backend(prefix='[junit.xml]')
 
     def parse(self, junit_xml, progress_cb=None):
         self.backend.configure()
