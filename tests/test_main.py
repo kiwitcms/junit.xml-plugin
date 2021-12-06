@@ -13,5 +13,5 @@ class MainFuncTestCase(unittest.TestCase):
 
     def test_when_calling_main_without_arguments_then_usage(self):
         with self.assertRaisesRegex(Exception,
-                                    'USAGE: %s junit.xml' % __file__):
+                                    f'USAGE: {__file__} junit.xml'):
             main([__file__])
