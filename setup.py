@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # pylint: disable=missing-docstring
+import os
 from setuptools import setup
+
+
+def get_version():
+    version_py_path = os.path.join('tcms_junit_plugin', 'version.py')
+    with open(version_py_path, encoding="utf-8") as version_file:
+        version = version_file.read()
+        return version.replace(
+            ' ', ''
+        ).replace('__version__=', '').strip().strip("'").strip('"')
 
 
 with open('README.rst', encoding="utf-8") as readme:
@@ -12,7 +22,7 @@ with open('requirements.txt', encoding="utf-8") as requirements:
 
 
 setup(name='kiwitcms-junit.xml-plugin',
-      version='11.0',
+      version=get_version(),
       packages=['tcms_junit_plugin'],
       scripts=['tcms-junit.xml-plugin'],
       description='junit.xml plugin for '

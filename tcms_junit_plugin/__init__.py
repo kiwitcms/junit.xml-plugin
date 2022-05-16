@@ -1,9 +1,16 @@
-# Copyright (c) 2019-2021 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2022 Alexander Todorov <atodorov@MrSenko.com>
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 
 from junitparser import Error, Failure, JUnitXml, Skipped
-from tcms_api.plugin_helpers import Backend
+from tcms_api import plugin_helpers
+
+from .version import __version__
+
+
+class Backend(plugin_helpers.Backend):
+    name = "kiwitcms-junit.xml-plugin"
+    version = __version__
 
 
 class Plugin:  # pylint: disable=too-few-public-methods
@@ -32,7 +39,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
             self.backend.add_test_case_to_plan(test_case['id'],
                                                self.backend.plan_id)
 
-            comment = 'Result recorded via Kiwi TCMS junit.xml-plugin'
+            comment = self.backend.created_by_text
             if not xml_case.result:
                 status_id = self.backend.get_status_id('PASSED')
 
