@@ -100,10 +100,21 @@ Usage
 Changelog
 ---------
 
+v11.2 (16 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Update junitparser from 2.2.0 to 2.5.0
+- Update tcms-api from 11.0 to 11.2
+- Annotate plugin with name & version information
+- Trim TestCase.summary to 255 characters. Fixes
+  `Issue #44 <https://github.com/kiwitcms/junit.xml-plugin/issues/44>`_
+- Updates around testing of this package
+
+
 v11.0 (05 Dec 2021)
 ~~~~~~~~~~~~~~~~~~~
 
-- Future compatible with upcomingKiwi TCMS v11.0
+- Future compatible with upcoming Kiwi TCMS v11.0
 - Update tcms-api to 11.0
 - Update junitparser from 2.0.0 to 2.2.0
 - Fix pylint issues
