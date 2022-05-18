@@ -1,6 +1,7 @@
 # Copyright (c) 2019-2022 Alexander Todorov <atodorov@MrSenko.com>
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
+import argparse
 
 from junitparser import Error, Failure, JUnitXml, Skipped
 from tcms_api import plugin_helpers
@@ -14,8 +15,9 @@ class Backend(plugin_helpers.Backend):
 
 
 class Plugin:  # pylint: disable=too-few-public-methods
-    def __init__(self):
-        self.backend = Backend(prefix='[junit.xml]')
+    def __init__(self, verbose=False):
+        self.backend = Backend(prefix='[junit.xml]', verbose=verbose)
+        self.verbose = verbose
 
     def parse(self, junit_xml, progress_cb=None):
         self.backend.configure()
@@ -77,9 +79,13 @@ class Plugin:  # pylint: disable=too-few-public-methods
 
 
 def main(argv):
-    if len(argv) < 2:
-        program_name = argv[0]
-        raise Exception(f"USAGE: {program_name} junit.xml")
+    parser = argparse.ArgumentParser(
+        description='Parse the specified TAP files and '
+                    'send the results to Kiwi TCMS'
+    )
+    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
+                        help='Print information about created TP/TR records')
+    args = parser.parse_args(argv[1:])
 
-    plugin = Plugin()
+    plugin = Plugin(verbose=args.verbose)
     plugin.parse(argv[1])
