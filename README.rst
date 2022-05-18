@@ -100,6 +100,15 @@ Usage
 Changelog
 ---------
 
+v11.3 (18 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Update tcms-api from 11.2 to 11.3
+- Print information about created records if ``-v`` or ``--verbose``
+  is specified on the command line
+- Allow multiple XML files to be specified on the command line
+
+
 v11.2 (16 May 2022)
 ~~~~~~~~~~~~~~~~~~~
 
