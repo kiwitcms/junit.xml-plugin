@@ -3,7 +3,4 @@
 # Execute this from the project root directory
 
 nosetests --with-xunit
-./tcms-junit.xml-plugin nosetests.xml
-
-# parse additional data files collected from issues
-./tcms-junit.xml-plugin tests/data/9.xml
+./tcms-junit.xml-plugin --verbose nosetests.xml tests/data/9.xml
