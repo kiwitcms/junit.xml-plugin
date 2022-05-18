@@ -19,73 +19,84 @@ class Plugin:  # pylint: disable=too-few-public-methods
         self.backend = Backend(prefix='[junit.xml]', verbose=verbose)
         self.verbose = verbose
 
-    def parse(self, junit_xml, progress_cb=None):
+    def parse(
+        self,
+        junit_filenames,
+        progress_cb=None
+    ):  # pylint: disable=too-many-branches, too-many-locals
         self.backend.configure()
 
-        xml = JUnitXml.fromfile(junit_xml)
-        # apparently junit.xml may contain either a <testsuites> tag,
-        # e.g. Katalon Studio
-        if xml._tag == "testsuites":  # pylint: disable=protected-access
-            cases = []
-            for suite in xml:
-                for case in suite:
-                    cases.append(case)
-        # or directly <testsuite> (only 1) tag - nose & py.test
-        else:
-            cases = list(xml)
+        for junit_xml in junit_filenames:
+            if self.verbose:
+                print(f"Parsing {junit_xml} ...")
 
-        for xml_case in cases:
-            summary = f"{xml_case.classname}.{xml_case.name}"[:255]
+            xml = JUnitXml.fromfile(junit_xml)
+            # apparently junit.xml may contain either a <testsuites> tag,
+            # e.g. Katalon Studio
+            if xml._tag == "testsuites":  # pylint: disable=protected-access
+                cases = []
+                for suite in xml:
+                    for case in suite:
+                        cases.append(case)
+            # or directly <testsuite> (only 1) tag - nose & py.test
+            else:
+                cases = list(xml)
 
-            test_case, _ = self.backend.test_case_get_or_create(summary)
-            self.backend.add_test_case_to_plan(test_case['id'],
-                                               self.backend.plan_id)
+            for xml_case in cases:
+                summary = f"{xml_case.classname}.{xml_case.name}"[:255]
 
-            comment = self.backend.created_by_text
-            if not xml_case.result:
-                status_id = self.backend.get_status_id('PASSED')
+                test_case, _ = self.backend.test_case_get_or_create(summary)
+                self.backend.add_test_case_to_plan(test_case['id'],
+                                                   self.backend.plan_id)
 
-            # note: since junitpartser v2.0 the result attribute holds
-            # a list of values b/c pytest can produce files which contain
-            # multiple results for the same test case. We take the first!
-            for result in xml_case.result:
-                if isinstance(result, Failure):
-                    status_id = self.backend.get_status_id('FAILED')
-                    comment = result.tostring()
-                    break
+                comment = self.backend.created_by_text
+                if not xml_case.result:
+                    status_id = self.backend.get_status_id('PASSED')
 
-                if isinstance(result, Error):
-                    status_id = self.backend.get_status_id('ERROR')
-                    comment = result.tostring()
-                    break
+                # note: since junitpartser v2.0 the result attribute holds
+                # a list of values b/c pytest can produce files which contain
+                # multiple results for the same test case. We take the first!
+                for result in xml_case.result:
+                    if isinstance(result, Failure):
+                        status_id = self.backend.get_status_id('FAILED')
+                        comment = result.tostring()
+                        break
 
-                if isinstance(result, Skipped):
-                    status_id = self.backend.get_status_id('WAIVED')
-                    comment = result.message
-                    break
+                    if isinstance(result, Error):
+                        status_id = self.backend.get_status_id('ERROR')
+                        comment = result.tostring()
+                        break
 
-            for execution in self.backend.add_test_case_to_run(
-                test_case['id'],
-                self.backend.run_id,
-            ):
-                self.backend.update_test_execution(execution["id"],
-                                                   status_id,
-                                                   comment)
+                    if isinstance(result, Skipped):
+                        status_id = self.backend.get_status_id('WAIVED')
+                        comment = result.message
+                        break
 
-            if progress_cb:
-                progress_cb()
+                for execution in self.backend.add_test_case_to_run(
+                    test_case['id'],
+                    self.backend.run_id,
+                ):
+                    self.backend.update_test_execution(execution["id"],
+                                                       status_id,
+                                                       comment)
+
+                if progress_cb:
+                    progress_cb()
 
         self.backend.finish_test_run()
 
 
 def main(argv):
     parser = argparse.ArgumentParser(
-        description='Parse the specified TAP files and '
+        description='Parse the specified XML files and '
                     'send the results to Kiwi TCMS'
     )
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                         help='Print information about created TP/TR records')
+    parser.add_argument('filename.xml', type=str, nargs='+',
+                        help='XML file(s) to parse')
+
     args = parser.parse_args(argv[1:])
 
     plugin = Plugin(verbose=args.verbose)
-    plugin.parse(argv[1])
+    plugin.parse(getattr(args, 'filename.xml'))
