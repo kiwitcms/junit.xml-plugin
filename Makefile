@@ -6,7 +6,8 @@ flake8:
 .PHONY: pylint
 pylint:
 	pylint -d missing-docstring *.py tcms_junit_plugin/
-	pylint -d missing-docstring -d invalid-name -d too-few-public-methods \
+	pylint --load-plugins=pylint.extensions.no_self_use \
+	    -d missing-docstring -d invalid-name -d too-few-public-methods \
 	    -d protected-access -d duplicate-code tests/
 
 
