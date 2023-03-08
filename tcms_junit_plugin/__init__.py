@@ -39,6 +39,9 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 cases = []
                 for suite in xml:
                     for case in suite:
+                        # Retain the suite name (if present) with each testcase.
+                        if suite.name:
+                            case.suitename = suite.name
                         cases.append(case)
             # or directly <testsuite> (only 1) tag - nose & py.test
             else:
@@ -48,7 +51,9 @@ class Plugin:  # pylint: disable=too-few-public-methods
             for xml_case in cases:
                 # Only permit non-secret values in this map
                 # Users with template control can retrieve any value set here.
-                values = {"classname": xml_case.classname, "name": xml_case.name}
+                values = {
+                    "classname": xml_case.classname, "name": xml_case.name,
+                    "suitename": xml_case.suitename}
 
                 summary = summary_template.substitute(values)[:255]
 
