@@ -4,6 +4,7 @@
 import argparse
 
 from junitparser import Error, Failure, JUnitXml, Skipped
+from string import Template
 from tcms_api import plugin_helpers
 
 from .version import __version__
@@ -15,9 +16,11 @@ class Backend(plugin_helpers.Backend):
 
 
 class Plugin:  # pylint: disable=too-few-public-methods
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False, summary_template='$classname.$name'):
         self.backend = Backend(prefix='[junit.xml]', verbose=verbose)
         self.verbose = verbose
+        # NB: template is defaulted both here and in the argument parser below
+        self.summary_template = summary_template
 
     def parse(
         self,
@@ -37,13 +40,26 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 cases = []
                 for suite in xml:
                     for case in suite:
+                        # Retain the suite name (if present) with each
+                        # testcase.
+                        if suite.name:
+                            case.suitename = suite.name
                         cases.append(case)
             # or directly <testsuite> (only 1) tag - nose & py.test
             else:
                 cases = list(xml)
 
+            summary_template = Template(self.summary_template)
             for xml_case in cases:
-                summary = f"{xml_case.classname}.{xml_case.name}"[:255]
+                # Only permit non-secret values in this map
+                # Users with template control can retrieve any value set here.
+                values = {
+                    "classname": xml_case.classname,
+                    "name": xml_case.name,
+                    "suitename": xml_case.suitename
+                }
+
+                summary = summary_template.substitute(values)[:255]
 
                 test_case, _ = self.backend.test_case_get_or_create(summary)
                 self.backend.add_test_case_to_plan(test_case['id'],
@@ -93,10 +109,16 @@ def main(argv):
     )
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                         help='Print information about created TP/TR records')
+    # NB: template is defaulted both here and in the Plugin init method above
+    parser.add_argument('--summary-template', dest='summary_template',
+                        type=str,
+                        help='Template summary from testcase, eg %(default)s.',
+                        default='${classname}.${name}')
     parser.add_argument('filename.xml', type=str, nargs='+',
                         help='XML file(s) to parse')
 
     args = parser.parse_args(argv[1:])
 
-    plugin = Plugin(verbose=args.verbose)
+    plugin = Plugin(verbose=args.verbose,
+                    summary_template=args.summary_template)
     plugin.parse(getattr(args, 'filename.xml'))
