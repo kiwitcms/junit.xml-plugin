@@ -104,7 +104,7 @@ NEXT
 ~~~~
 
 - Provide a ``--summary-template`` for optional customization of the
-  summary generated from the test cases. 
+  summary generated from the test cases.
 
 v11.3 (18 May 2022)
 ~~~~~~~~~~~~~~~~~~~
