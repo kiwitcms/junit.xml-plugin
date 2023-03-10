@@ -54,8 +54,10 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 # Only permit non-secret values in this map
                 # Users with template control can retrieve any value set here.
                 values = {
-                    "classname": xml_case.classname, "name": xml_case.name,
-                    "suitename": xml_case.suitename}
+                    "classname": xml_case.classname,
+                    "name": xml_case.name,
+                    "suitename": xml_case.suitename
+                }
 
                 summary = summary_template.substitute(values)[:255]
 
