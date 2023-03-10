@@ -16,10 +16,11 @@ class Backend(plugin_helpers.Backend):
 
 
 class Plugin:  # pylint: disable=too-few-public-methods
-    def __init__(self, summary_template, verbose=False):
+    def __init__(self, verbose=False, summary_template='$classname.$name'):
         self.backend = Backend(prefix='[junit.xml]', verbose=verbose)
-        self.summary_template = summary_template
         self.verbose = verbose
+        # NB: template is defaulted both here and in the argument parser below
+        self.summary_template = summary_template
 
     def parse(
         self,
@@ -39,7 +40,8 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 cases = []
                 for suite in xml:
                     for case in suite:
-                        # Retain the suite name (if present) with each testcase.
+                        # Retain the suite name (if present) with each
+                        # testcase.
                         if suite.name:
                             case.suitename = suite.name
                         cases.append(case)
@@ -105,13 +107,16 @@ def main(argv):
     )
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                         help='Print information about created TP/TR records')
-    parser.add_argument('--summary-template', dest='summary_template', type=str,
-                        help='Template to convert testcase to summary, eg %(default)s.',
+    # NB: template is defaulted both here and in the Plugin init method above
+    parser.add_argument('--summary-template', dest='summary_template',
+                        type=str,
+                        help='Template summary from testcase, eg %(default)s.',
                         default='${classname}.${name}')
     parser.add_argument('filename.xml', type=str, nargs='+',
                         help='XML file(s) to parse')
 
     args = parser.parse_args(argv[1:])
 
-    plugin = Plugin(args.summary_template, verbose=args.verbose)
+    plugin = Plugin(verbose=args.verbose,
+                    summary_template=args.summary_template)
     plugin.parse(getattr(args, 'filename.xml'))
