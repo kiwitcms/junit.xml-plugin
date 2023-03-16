@@ -25,6 +25,18 @@ class Plugin:  # pylint: disable=too-few-public-methods
         # NB: template is defaulted both here and in the argument parser below
         self.summary_template = summary_template
 
+    def testcase_summary(self, xml_case):
+        """
+        This method will generate the TestCase summary which is sent to
+        Kiwi TCMS. It may be overriden for more flexibility!
+        """
+        values = {
+            "classname": xml_case.classname,
+            "name": xml_case.name,
+            "suitename": xml_case.suitename
+        }
+        return Template(self.summary_template).substitute(values)
+
     def parse(
         self,
         junit_filenames,
@@ -52,17 +64,8 @@ class Plugin:  # pylint: disable=too-few-public-methods
             else:
                 cases = list(xml)
 
-            summary_template = Template(self.summary_template)
             for xml_case in cases:
-                # Only permit non-secret values in this map
-                # Users with template control can retrieve any value set here.
-                values = {
-                    "classname": xml_case.classname,
-                    "name": xml_case.name,
-                    "suitename": xml_case.suitename
-                }
-
-                summary = summary_template.substitute(values)[:255]
+                summary = self.testcase_summary(xml_case)[:255]
 
                 test_case, _ = self.backend.test_case_get_or_create(summary)
                 self.backend.add_test_case_to_plan(test_case['id'],
