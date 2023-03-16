@@ -2,9 +2,9 @@
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 import argparse
+from string import Template
 
 from junitparser import Error, Failure, JUnitXml, Skipped
-from string import Template
 from tcms_api import plugin_helpers
 
 from .version import __version__
