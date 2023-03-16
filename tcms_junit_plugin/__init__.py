@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2022 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2023 Alexander Todorov <atodorov@MrSenko.com>
 
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 import argparse
@@ -10,13 +10,16 @@ from tcms_api import plugin_helpers
 from .version import __version__
 
 
+DEFAULT_TEMPLATE = "${classname}.${name}"
+
+
 class Backend(plugin_helpers.Backend):
     name = "kiwitcms-junit.xml-plugin"
     version = __version__
 
 
 class Plugin:  # pylint: disable=too-few-public-methods
-    def __init__(self, verbose=False, summary_template='$classname.$name'):
+    def __init__(self, verbose=False, summary_template=DEFAULT_TEMPLATE):
         self.backend = Backend(prefix='[junit.xml]', verbose=verbose)
         self.verbose = verbose
         # NB: template is defaulted both here and in the argument parser below
@@ -113,7 +116,7 @@ def main(argv):
     parser.add_argument('--summary-template', dest='summary_template',
                         type=str,
                         help='Template summary from testcase, eg %(default)s.',
-                        default='${classname}.${name}')
+                        default=DEFAULT_TEMPLATE)
     parser.add_argument('filename.xml', type=str, nargs='+',
                         help='XML file(s) to parse')
 
