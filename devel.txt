@@ -1,5 +1,6 @@
 -r requirements.txt
 
+black
 nose
 coverage
 flake8
