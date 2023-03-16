@@ -33,7 +33,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
         values = {
             "classname": xml_case.classname,
             "name": xml_case.name,
-            "suitename": xml_case.suitename
+            "suitename": getattr(xml_case, "suitename", None)
         }
         return Template(self.summary_template).substitute(values)
 
