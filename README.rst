@@ -100,11 +100,16 @@ Usage
 Changelog
 ---------
 
-NEXT
-~~~~
+v12.0 (16 Mar 2023)
+~~~~~~~~~~~~~~~~~~~
 
 - Provide a ``--summary-template`` for optional customization of the
-  summary generated from the test cases.
+  summary generated from the test cases (Michael Kaye)
+- Update junitparser from 2.5.0 to 2.8.0
+- Update tcms-api from 11.3 to 11.4
+- Refactoring and code formatting
+- Add CodeQL workflow for GitHub code scanning
+
 
 v11.3 (18 May 2022)
 ~~~~~~~~~~~~~~~~~~~
