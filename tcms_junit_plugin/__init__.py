@@ -97,7 +97,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
                     test_case["id"],
                     self.backend.run_id,
                 ):
-                    self.backend.update_test_execution(execution["id"], status_id, comment)
+                    self.backend.update_test_execution(execution["id"], status_id, comment.decode())
 
                 if progress_cb:
                     progress_cb()
