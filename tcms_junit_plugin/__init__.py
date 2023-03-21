@@ -79,6 +79,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 # multiple results for the same test case. We take the first!
                 for result in xml_case.result:
                     comment = result.tostring().decode()
+                    comment = f"```{comment}```"
 
                     if isinstance(result, Failure):
                         status_id = self.backend.get_status_id("FAILED")
