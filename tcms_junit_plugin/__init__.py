@@ -27,6 +27,23 @@ class Plugin:  # pylint: disable=too-few-public-methods
         # NB: template is defaulted both here and in the argument parser below
         self.summary_template = summary_template
 
+    @staticmethod
+    def extract_logs(xml_case):
+        return f"""
+
+-----
+Output logs:
+```
+{xml_case.system_out}
+```
+
+-----
+Error logs:
+```
+{xml_case.system_err}
+```
+"""
+
     def testcase_summary(self, xml_case):
         """
         This method will generate the TestCase summary which is sent to
@@ -78,15 +95,17 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 # a list of values b/c pytest can produce files which contain
                 # multiple results for the same test case. We take the first!
                 for result in xml_case.result:
-                    comment = result.tostring().decode()
+                    comment = result.tostring().decode().strip()
                     comment = f"```{comment}```"
 
                     if isinstance(result, Failure):
                         status_id = self.backend.get_status_id("FAILED")
+                        comment += self.extract_logs(xml_case)
                         break
 
                     if isinstance(result, Error):
                         status_id = self.backend.get_status_id("ERROR")
+                        comment += self.extract_logs(xml_case)
                         break
 
                     if isinstance(result, Skipped):
