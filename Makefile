@@ -13,7 +13,7 @@ pylint:
 
 .PHONY: test
 test:
-	nosetests -v --with-coverage --cover-erase --cover-package=tcms_junit_plugin
+	nose2 -v --with-coverage --coverage tcms_junit_plugin
 
 
 .PHONY: junit.xml

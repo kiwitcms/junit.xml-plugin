@@ -1,7 +1,7 @@
 -r requirements.txt
 
 black
-nose
+nose2[coverage_plugin]
 coverage
 flake8
 pylint
