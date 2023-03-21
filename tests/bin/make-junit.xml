@@ -3,5 +3,5 @@
 set -e
 
 # Execute this from the project root directory
-nosetests --with-xunit
-./tcms-junit.xml-plugin --verbose nosetests.xml tests/data/9.xml
+nose2 --plugin nose2.plugins.junitxml --junit-xml
+./tcms-junit.xml-plugin --verbose nose2-junit.xml tests/data/9.xml
