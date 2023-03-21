@@ -100,6 +100,15 @@ Usage
 Changelog
 ---------
 
+v12.1 (21 Mar 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- Decode byte strings before sending comments to RPC (Sergey Lazarev)
+- Format comments as Markdown when rendering the raw XML values
+- Append stdout/stderr information to failure/error comments
+- Updates around CI and expanded test matrix
+
+
 v12.0 (16 Mar 2023)
 ~~~~~~~~~~~~~~~~~~~
 
