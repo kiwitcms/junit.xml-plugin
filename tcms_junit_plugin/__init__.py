@@ -78,14 +78,14 @@ class Plugin:  # pylint: disable=too-few-public-methods
                 # a list of values b/c pytest can produce files which contain
                 # multiple results for the same test case. We take the first!
                 for result in xml_case.result:
+                    comment = result.tostring().decode()
+
                     if isinstance(result, Failure):
                         status_id = self.backend.get_status_id("FAILED")
-                        comment = result.tostring()
                         break
 
                     if isinstance(result, Error):
                         status_id = self.backend.get_status_id("ERROR")
-                        comment = result.tostring()
                         break
 
                     if isinstance(result, Skipped):
@@ -97,7 +97,7 @@ class Plugin:  # pylint: disable=too-few-public-methods
                     test_case["id"],
                     self.backend.run_id,
                 ):
-                    self.backend.update_test_execution(execution["id"], status_id, comment.decode())
+                    self.backend.update_test_execution(execution["id"], status_id, comment)
 
                 if progress_cb:
                     progress_cb()
