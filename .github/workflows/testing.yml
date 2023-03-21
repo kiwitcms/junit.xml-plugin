@@ -7,12 +7,12 @@ on:
 
 jobs:
   static_analysis:
-    name: ${{ matrix.make-command }}
+    name: ${{ matrix.python-version }} / ${{ matrix.make-command }} / ${{ matrix.kiwitcms-url }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8]
+        python-version: [3.8, 3.9, '3.10', '3.11']
         kiwitcms-url: [tcms.kiwitcms.org, public.tenant.kiwitcms.org]
         make-command: [ci, check-build, junit.xml]
 
@@ -32,6 +32,7 @@ jobs:
         pip install -r devel.txt
 
     - name: Prepare ~/.tcms.conf for ${{ matrix.kiwitcms-url }}
+      if: env.SHOULD_RUN
       run: |
           echo "[tcms]" > ~/.tcms.conf
           echo "url = https://${{ matrix.kiwitcms-url }}/xml-rpc/" >> ~/.tcms.conf
@@ -39,6 +40,8 @@ jobs:
           echo "password = ${{ secrets.TCMS_PASSWORD }}" >> ~/.tcms.conf
           sudo cp .ssl/*.pem /usr/lib/ssl/certs/
           sudo update-ca-certificates --fresh
+      env:
+        SHOULD_RUN: ${{ secrets.TCMS_PASSWORD }}
 
     - name: make ${{ matrix.make-command }}
       run: |
