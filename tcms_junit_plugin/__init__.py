@@ -1,6 +1,8 @@
 # Copyright (c) 2019-2023 Alexander Todorov <atodorov@MrSenko.com>
 # Licensed under the GPLv3: https://www.gnu.org/licenses/gpl.html
 import argparse
+from datetime import datetime
+from datetime import timedelta
 from string import Template
 
 from junitparser import Error
@@ -55,6 +57,24 @@ Error logs:
             "suitename": getattr(xml_case, "suitename", None),
         }
         return Template(self.summary_template).substitute(values)
+
+    # pylint: disable=protected-access
+    def testexecution_timestamps(self, xml_case):
+        """
+        This method will return (start_date, stop_date) if information
+        is present!
+        """
+        start_date = None
+        stop_date = None
+
+        if "timestamp" in xml_case._elem.attrib:
+            start_date = datetime.strptime(
+                xml_case._elem.attrib["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"
+            )
+        if "time" in xml_case._elem.attrib:
+            stop_date = start_date + timedelta(seconds=xml_case.time)
+
+        return (start_date, stop_date)
 
     def parse(
         self, junit_filenames, progress_cb=None
@@ -117,7 +137,14 @@ Error logs:
                     test_case["id"],
                     self.backend.run_id,
                 ):
-                    self.backend.update_test_execution(execution["id"], status_id, comment)
+                    start_date, stop_date = self.testexecution_timestamps(xml_case)
+                    self.backend.update_test_execution(
+                        execution["id"],
+                        status_id,
+                        comment=comment,
+                        start_date=start_date,
+                        stop_date=stop_date,
+                    )
 
                 if progress_cb:
                     progress_cb()
