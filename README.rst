@@ -100,6 +100,12 @@ Usage
 Changelog
 ---------
 
+v12.2 (04 Apr 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- Report TestExecution timestamps if present in XML
+
+
 v12.1 (21 Mar 2023)
 ~~~~~~~~~~~~~~~~~~~
 
