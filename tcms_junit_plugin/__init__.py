@@ -75,7 +75,7 @@ Error logs:
         # update start_date if individual case contains this information
         if "timestamp" in xml_case._elem.attrib:
             start_date = self.parse_timestamp(xml_case._elem.attrib["timestamp"])
-        if "time" in xml_case._elem.attrib:
+        if start_date and "time" in xml_case._elem.attrib:
             stop_date = start_date + timedelta(seconds=xml_case.time)
 
         return (start_date, stop_date)
