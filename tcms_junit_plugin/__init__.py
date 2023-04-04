@@ -71,7 +71,7 @@ Error logs:
             start_date = datetime.strptime(
                 xml_case._elem.attrib["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"
             )
-        if "time" in xml_case._elem.attrib:
+        if start_date and "time" in xml_case._elem.attrib:
             stop_date = start_date + timedelta(seconds=xml_case.time)
 
         return (start_date, stop_date)
