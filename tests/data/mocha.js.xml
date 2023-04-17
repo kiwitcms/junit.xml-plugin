@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="73.132" tests="4" failures="0">
+  <testsuite name="" timestamp="2023-03-06T13:18:40" tests="0" file="cypress/e2e/integration-manager/send_event.spec.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Root Suite Integration Manager: Send Event" timestamp="2023-03-06T13:18:40" tests="4" time="73.081" failures="0">
+    <testcase name="Integration Manager: Send Event should send a state event" time="21.077" classname="should send a state event">
+    </testcase>
+    <testcase name="Integration Manager: Send Event should send a state event with empty content" time="16.205" classname="should send a state event with empty content">
+    </testcase>
+    <testcase name="Integration Manager: Send Event should send a state event with empty state key" time="16.372" classname="should send a state event with empty state key">
+    </testcase>
+    <testcase name="Integration Manager: Send Event should fail to send an event type which is not allowed" time="16.032" classname="should fail to send an event type which is not allowed">
+    </testcase>
+  </testsuite>
+</testsuites>
