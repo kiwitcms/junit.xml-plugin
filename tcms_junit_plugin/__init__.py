@@ -59,7 +59,7 @@ Error logs:
         return Template(self.summary_template).substitute(values)
 
     # pylint: disable=protected-access
-    def testexecution_timestamps(self, xml_case):
+    def testexecution_timestamps(self, xml_suite, xml_case):
         """
         This method will return (start_date, stop_date) if information
         is present!
@@ -67,14 +67,36 @@ Error logs:
         start_date = None
         stop_date = None
 
+        # some runners, e.g. Mocha.js reports a single starting timestamp
+        # as a <testsuite> attribute. Take that if available!
+        if "timestamp" in xml_suite._elem.attrib:
+            start_date = self.parse_timestamp(xml_suite._elem.attrib["timestamp"])
+
+        # update start_date if individual case contains this information
         if "timestamp" in xml_case._elem.attrib:
-            start_date = datetime.strptime(
-                xml_case._elem.attrib["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"
-            )
+            start_date = self.parse_timestamp(xml_case._elem.attrib["timestamp"])
         if "time" in xml_case._elem.attrib:
             stop_date = start_date + timedelta(seconds=xml_case.time)
 
         return (start_date, stop_date)
+
+    def parse_timestamp(self, value):
+        """
+        Try different timestamp formats until one of them finally works!
+        """
+        # IMPORTANT: keep the format strings ordered such that the parser extracts
+        # as much information as possible
+        for format_string in [
+            "%Y-%m-%dT%H:%M:%S.%f",  # Nose2
+            "%Y-%m-%dT%H:%M:%S",  # Mocha.js
+            "%Y-%m-%d %H:%M:%S",  # Katalon Studio
+        ]:
+            try:
+                return datetime.strptime(value, format_string)
+            except ValueError:
+                pass
+
+        raise ValueError(f"Unknown timestamp format {value}")
 
     def parse_as_testsuites(self, xml_path):
         xml = JUnitXml.fromfile(xml_path)
@@ -142,7 +164,7 @@ Error logs:
                         test_case["id"],
                         self.backend.run_id,
                     ):
-                        start_date, stop_date = self.testexecution_timestamps(xml_case)
+                        start_date, stop_date = self.testexecution_timestamps(xml_suite, xml_case)
                         self.backend.update_test_execution(
                             execution["id"],
                             status_id,
