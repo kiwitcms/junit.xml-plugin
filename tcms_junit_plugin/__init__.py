@@ -46,7 +46,7 @@ Error logs:
 ```
 """
 
-    def testcase_summary(self, xml_case):
+    def testcase_summary(self, xml_suite, xml_case):
         """
         This method will generate the TestCase summary which is sent to
         Kiwi TCMS. It may be overriden for more flexibility!
@@ -54,7 +54,7 @@ Error logs:
         values = {
             "classname": xml_case.classname,
             "name": xml_case.name,
-            "suitename": getattr(xml_case, "suitename", None),
+            "suitename": getattr(xml_suite, "name", None),
         }
         return Template(self.summary_template).substitute(values)
 
@@ -76,6 +76,24 @@ Error logs:
 
         return (start_date, stop_date)
 
+    def parse_as_testsuites(self, xml_path):
+        xml = JUnitXml.fromfile(xml_path)
+        # apparently junit.xml may contain either a <testsuites> tag,
+        # e.g. Katalon Studio, Mocha.js
+        if xml._tag == "testsuites":  # pylint: disable=protected-access
+            return xml
+
+        # or a single <testsuite> tag,
+        # e.g. Nose2, py.test
+        if xml._tag == "testsuite":  # pylint: disable=protected-access
+            # transforms the input data to a format which contains the <testsuites> tag
+            new_xml = JUnitXml()
+            # see JUnitXml.__iadd__() method
+            new_xml += xml
+            return new_xml
+
+        raise RuntimeError(f"Unknown XML root tag {xml._tag}")
+
     def parse(
         self, junit_filenames, progress_cb=None
     ):  # pylint: disable=too-many-branches, too-many-locals
@@ -85,69 +103,56 @@ Error logs:
             if self.verbose:
                 print(f"Parsing {junit_xml} ...")
 
-            xml = JUnitXml.fromfile(junit_xml)
-            # apparently junit.xml may contain either a <testsuites> tag,
-            # e.g. Katalon Studio
-            if xml._tag == "testsuites":  # pylint: disable=protected-access
-                cases = []
-                for suite in xml:
-                    for case in suite:
-                        # Retain the suite name (if present) with each
-                        # testcase.
-                        if suite.name:
-                            case.suitename = suite.name
-                        cases.append(case)
-            # or directly <testsuite> (only 1) tag - nose & py.test
-            else:
-                cases = list(xml)
+            xml = self.parse_as_testsuites(junit_xml)
 
-            for xml_case in cases:
-                summary = self.testcase_summary(xml_case)[:255]
+            for xml_suite in xml:
+                for xml_case in xml_suite:
+                    summary = self.testcase_summary(xml_suite, xml_case)[:255]
 
-                test_case, _ = self.backend.test_case_get_or_create(summary)
-                self.backend.add_test_case_to_plan(test_case["id"], self.backend.plan_id)
+                    test_case, _ = self.backend.test_case_get_or_create(summary)
+                    self.backend.add_test_case_to_plan(test_case["id"], self.backend.plan_id)
 
-                comment = self.backend.created_by_text
-                if not xml_case.result:
-                    status_id = self.backend.get_status_id("PASSED")
+                    comment = self.backend.created_by_text
+                    if not xml_case.result:
+                        status_id = self.backend.get_status_id("PASSED")
 
-                # note: since junitpartser v2.0 the result attribute holds
-                # a list of values b/c pytest can produce files which contain
-                # multiple results for the same test case. We take the first!
-                for result in xml_case.result:
-                    comment = result.tostring().decode().strip()
-                    comment = f"```{comment}```"
+                    # note: since junitpartser v2.0 the result attribute holds
+                    # a list of values b/c pytest can produce files which contain
+                    # multiple results for the same test case. We take the first!
+                    for result in xml_case.result:
+                        comment = result.tostring().decode().strip()
+                        comment = f"```{comment}```"
 
-                    if isinstance(result, Failure):
-                        status_id = self.backend.get_status_id("FAILED")
-                        comment += self.extract_logs(xml_case)
-                        break
+                        if isinstance(result, Failure):
+                            status_id = self.backend.get_status_id("FAILED")
+                            comment += self.extract_logs(xml_case)
+                            break
 
-                    if isinstance(result, Error):
-                        status_id = self.backend.get_status_id("ERROR")
-                        comment += self.extract_logs(xml_case)
-                        break
+                        if isinstance(result, Error):
+                            status_id = self.backend.get_status_id("ERROR")
+                            comment += self.extract_logs(xml_case)
+                            break
 
-                    if isinstance(result, Skipped):
-                        status_id = self.backend.get_status_id("WAIVED")
-                        comment = result.message
-                        break
+                        if isinstance(result, Skipped):
+                            status_id = self.backend.get_status_id("WAIVED")
+                            comment = result.message
+                            break
 
-                for execution in self.backend.add_test_case_to_run(
-                    test_case["id"],
-                    self.backend.run_id,
-                ):
-                    start_date, stop_date = self.testexecution_timestamps(xml_case)
-                    self.backend.update_test_execution(
-                        execution["id"],
-                        status_id,
-                        comment=comment,
-                        start_date=start_date,
-                        stop_date=stop_date,
-                    )
+                    for execution in self.backend.add_test_case_to_run(
+                        test_case["id"],
+                        self.backend.run_id,
+                    ):
+                        start_date, stop_date = self.testexecution_timestamps(xml_case)
+                        self.backend.update_test_execution(
+                            execution["id"],
+                            status_id,
+                            comment=comment,
+                            start_date=start_date,
+                            stop_date=stop_date,
+                        )
 
-                if progress_cb:
-                    progress_cb()
+                    if progress_cb:
+                        progress_cb()
 
         self.backend.finish_test_run()
 
