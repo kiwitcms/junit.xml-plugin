@@ -100,6 +100,16 @@ Usage
 Changelog
 ---------
 
+v12.2.999 (18 Apr 2023)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Read ``start_date`` from ``<testsuite timestamp>`` if it exists. Fixes
+  `Issue #89 <https://github.com/kiwitcms/junit.xml-plugin/issues/89>`_
+- Internal refactoring. **WARNING:** contains backwards incompatible changes for
+  ``testcase_summary()`` and ``testexecution_timestamps()`` methods which will
+  break inherited classes
+
+
 v12.2 (04 Apr 2023)
 ~~~~~~~~~~~~~~~~~~~
 
