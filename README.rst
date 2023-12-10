@@ -100,6 +100,14 @@ Usage
 Changelog
 ---------
 
+v12.7 (10 Dec 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- Update junitparser from 2.8.0 to 3.1.0
+- Update tcms-api from 12.2 to 12.7
+- Calculate ``stop_date`` only when ``start_date`` is valid (Michael Kaye)
+
+
 v12.2.999 (18 Apr 2023)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
