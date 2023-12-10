@@ -132,7 +132,9 @@ Error logs:
                     summary = self.testcase_summary(xml_suite, xml_case)[:255]
 
                     test_case, _ = self.backend.test_case_get_or_create(summary)
-                    self.backend.add_test_case_to_plan(test_case["id"], self.backend.plan_id)
+                    self.backend.add_test_case_to_plan(
+                        test_case["id"], self.backend.plan_id
+                    )
 
                     comment = self.backend.created_by_text
                     if not xml_case.result:
@@ -164,7 +166,9 @@ Error logs:
                         test_case["id"],
                         self.backend.run_id,
                     ):
-                        start_date, stop_date = self.testexecution_timestamps(xml_suite, xml_case)
+                        start_date, stop_date = self.testexecution_timestamps(
+                            xml_suite, xml_case
+                        )
                         self.backend.update_test_execution(
                             execution["id"],
                             status_id,
@@ -198,7 +202,9 @@ def main(argv):
         help="Template summary from testcase, eg %(default)s.",
         default=DEFAULT_TEMPLATE,
     )
-    parser.add_argument("filename.xml", type=str, nargs="+", help="XML file(s) to parse")
+    parser.add_argument(
+        "filename.xml", type=str, nargs="+", help="XML file(s) to parse"
+    )
 
     args = parser.parse_args(argv[1:])
 

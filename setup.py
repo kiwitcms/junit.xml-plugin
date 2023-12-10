@@ -9,7 +9,13 @@ def get_version():
     version_py_path = os.path.join("tcms_junit_plugin", "version.py")
     with open(version_py_path, encoding="utf-8") as version_file:
         version = version_file.read()
-        return version.replace(" ", "").replace("__version__=", "").strip().strip("'").strip('"')
+        return (
+            version.replace(" ", "")
+            .replace("__version__=", "")
+            .strip()
+            .strip("'")
+            .strip('"')
+        )
 
 
 with open("README.rst", encoding="utf-8") as readme:
