@@ -1,3 +1,3 @@
-junitparser==3.1.1
+junitparser==3.1.2
 tcms-api>=12.8.1
 requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
