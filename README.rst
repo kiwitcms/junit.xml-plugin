@@ -100,6 +100,12 @@ Usage
 Changelog
 ---------
 
+v15.0 (23 Sep 2025)
+~~~~~~~~~~~~~~~~~~~
+
+- Update junitparser from 3.1.0 to 3.2.0
+- Drop official support for Python 3.8
+
 
 v12.8.1 (22 Dec 2023)
 ~~~~~~~~~~~~~~~~~~~~~
