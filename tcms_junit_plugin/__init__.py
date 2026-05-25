@@ -13,7 +13,6 @@ from tcms_api import plugin_helpers
 
 from .version import __version__
 
-
 DEFAULT_TEMPLATE = "${classname}.${name}"
 
 
