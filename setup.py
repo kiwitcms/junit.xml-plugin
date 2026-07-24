@@ -35,7 +35,6 @@ setup(
     long_description=LONG_DESCRIPTION,
     author="Kiwi TCMS",
     author_email="info@kiwitcms.org",
-    license="GPLv3+",
     url="https://github.com/kiwitcms/junit.xml-plugin",
     install_requires=REQUIREMENTS,
     classifiers=[
@@ -43,7 +42,6 @@ setup(
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: POSIX",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.12",
